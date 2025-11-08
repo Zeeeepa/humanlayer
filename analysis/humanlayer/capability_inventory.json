@@ -1,0 +1,348 @@
+{
+  "metadata": {
+    "analysis_date": "2025-01-08",
+    "version": "analyzed",
+    "repository": "humanlayer/humanlayer"
+  },
+  "architecture": {
+    "overview": "Multi-layer architecture with Go daemon, TypeScript CLI, React/Tauri desktop UI",
+    "components": {
+      "hld": {
+        "name": "HumanLayer Daemon",
+        "language": "Go",
+        "files": 98,
+        "role": "Core orchestration engine, session management, approval handling",
+        "key_technologies": [
+          "Go 1.24",
+          "SQLite (mattn/go-sqlite3)",
+          "JSON-RPC over Unix sockets",
+          "Claude Code SDK",
+          "MCP-Go SDK",
+          "Gin web framework"
+        ],
+        "main_responsibilities": [
+          "Session lifecycle management",
+          "Approval workflow coordination",
+          "Database persistence (SQLite)",
+          "Event bus for inter-component communication",
+          "JSON-RPC API server",
+          "Claude Code integration"
+        ]
+      },
+      "hlyr": {
+        "name": "HumanLayer CLI",
+        "language": "TypeScript/Node.js",
+        "role": "User-facing CLI, MCP server implementation",
+        "key_technologies": [
+          "@modelcontextprotocol/sdk",
+          "@humanlayer/sdk",
+          "Commander.js (CLI framework)",
+          "@clack/prompts (interactive prompts)"
+        ],
+        "main_responsibilities": [
+          "CLI command interface",
+          "MCP server (approval system)",
+          "Configuration management",
+          "Daemon client communication",
+          "User authentication flows"
+        ]
+      },
+      "humanlayer-wui": {
+        "name": "HumanLayer Web/Desktop UI",
+        "language": "TypeScript/React",
+        "files": 232,
+        "role": "Desktop application and web interface",
+        "key_technologies": [
+          "React 19",
+          "Tauri 2.x (desktop)",
+          "Radix UI components",
+          "Tailwind CSS 4.x",
+          "Zustand (state management)",
+          "TipTap (rich text editor)",
+          "Vite (build tool)"
+        ],
+        "main_responsibilities": [
+          "Session visualization",
+          "Approval management UI",
+          "Conversation history display",
+          "Keyboard-first navigation",
+          "Real-time status updates (polling)",
+          "Multi-session management"
+        ]
+      },
+      "claudecode-go": {
+        "name": "Claude Code Go SDK",
+        "language": "Go",
+        "role": "Go SDK for launching Claude Code sessions"
+      }
+    }
+  },
+  "current_capabilities": {
+    "session_management": {
+      "features": [
+        "Launch Claude Code sessions with custom prompts",
+        "Session lifecycle tracking (starting/running/completed/failed)",
+        "Parallel session execution",
+        "Session continuation (multi-turn conversations)",
+        "Session history and persistence",
+        "Working directory specification",
+        "Model selection (Opus/Sonnet)",
+        "Custom system prompts",
+        "Max turns configuration",
+        "Tool allowlisting/denylisting"
+      ],
+      "limitations": [
+        "No session templates",
+        "No session cloning",
+        "No bulk session operations",
+        "No session sharing/collaboration",
+        "Limited session metadata export"
+      ]
+    },
+    "approval_system": {
+      "features": [
+        "Human-in-the-loop approval workflows",
+        "Approval request creation and tracking",
+        "Approve/deny with comments",
+        "Approval status monitoring",
+        "Integration with Claude Code tools",
+        "MCP server for approvals"
+      ],
+      "limitations": [
+        "No approval templates",
+        "No conditional approval rules",
+        "No approval delegation",
+        "No approval audit logs beyond basic tracking"
+      ]
+    },
+    "mcp_servers": {
+      "built_in": [
+        {
+          "name": "claude_approvals",
+          "tool": "request_permission",
+          "purpose": "Human-in-the-loop approval system"
+        },
+        {
+          "name": "contact_human",
+          "purpose": "Direct human communication"
+        }
+      ],
+      "extensibility": "Supports external MCP servers via configuration"
+    },
+    "claude_commands": {
+      "count": 30,
+      "categories": {
+        "planning": [
+          "create_plan.md",
+          "create_plan_generic.md",
+          "create_plan_nt.md",
+          "validate_plan.md",
+          "implement_plan.md"
+        ],
+        "research": [
+          "research_codebase.md",
+          "research_codebase_generic.md",
+          "research_codebase_nt.md"
+        ],
+        "development": [
+          "ralph_plan.md",
+          "ralph_research.md",
+          "ralph_impl.md",
+          "commit.md",
+          "ci_commit.md",
+          "debug.md",
+          "oneshot.md"
+        ],
+        "collaboration": [
+          "describe_pr.md",
+          "ci_describe_pr.md",
+          "local_review.md",
+          "create_handoff.md",
+          "resume_handoff.md",
+          "linear.md"
+        ],
+        "workflow": [
+          "create_worktree.md",
+          "founder_mode.md"
+        ]
+      },
+      "installation": "npx humanlayer claude init [--all]",
+      "extensibility": "Markdown-based command definitions in .claude/commands/"
+    },
+    "claude_agents": {
+      "count": 6,
+      "agents": [
+        {
+          "name": "codebase-analyzer",
+          "purpose": "Understand HOW code works",
+          "model": "Sonnet",
+          "tools": ["Read", "Grep", "Glob", "LS"]
+        },
+        {
+          "name": "codebase-locator",
+          "purpose": "Find WHERE code lives"
+        },
+        {
+          "name": "codebase-pattern-finder",
+          "purpose": "Identify patterns and conventions"
+        },
+        {
+          "name": "thoughts-analyzer",
+          "purpose": "Analyze developer thoughts/notes"
+        },
+        {
+          "name": "thoughts-locator",
+          "purpose": "Find relevant thoughts documents"
+        },
+        {
+          "name": "web-search-researcher",
+          "purpose": "Web research specialist"
+        }
+      ],
+      "extensibility": "Markdown-based agent definitions in .claude/agents/"
+    },
+    "conversation_history": {
+      "features": [
+        "Full conversation tracking",
+        "Event-based storage (messages, tool calls, results)",
+        "Sequence ordering",
+        "Approval status tracking in conversations",
+        "Session-based conversation retrieval"
+      ],
+      "limitations": [
+        "N+1 query problem for message counts",
+        "No full-text search",
+        "No conversation export API",
+        "Polling-based updates (no real-time streaming)"
+      ]
+    },
+    "ui_features": {
+      "features": [
+        "Session list view",
+        "Session details view",
+        "Approval management interface",
+        "Conversation history display",
+        "Keyboard shortcuts (cmd+k, navigation)",
+        "Dark/light theme support",
+        "ANSI color rendering",
+        "Rich text editing (TipTap)",
+        "Search functionality"
+      ],
+      "limitations": [
+        "Session table shortcuts broken (issue: 'c' doesn't launch creator)",
+        "Create new session goes to blank screen",
+        "Search view max height issues",
+        "Session navigation from search broken",
+        "No real-time updates (3-second polling)",
+        "No session comparison view",
+        "Limited analytics/dashboards"
+      ]
+    },
+    "configuration": {
+      "features": [
+        "Configuration file support (humanlayer.json)",
+        "Environment variable configuration",
+        "CLI flag precedence",
+        "XDG Base Directory support",
+        "Multiple configuration sources",
+        "Slack/Email channel configuration"
+      ],
+      "limitations": [
+        "No GUI for configuration management",
+        "No configuration validation UI",
+        "No configuration templates",
+        "No team-wide configuration sharing"
+      ]
+    },
+    "authentication": {
+      "features": [
+        "API key authentication",
+        "Login flow with browser",
+        "Token storage in config file"
+      ],
+      "limitations": [
+        "No OAuth support",
+        "No multi-user authentication",
+        "No role-based access control",
+        "No SSO integration"
+      ]
+    }
+  },
+  "technology_stack": {
+    "backend": {
+      "languages": ["Go 1.24"],
+      "frameworks": ["Gin", "Viper"],
+      "databases": ["SQLite"],
+      "communication": ["JSON-RPC", "Unix domain sockets", "WebSocket (future)"]
+    },
+    "frontend": {
+      "languages": ["TypeScript"],
+      "frameworks": ["React 19", "Tauri 2.x"],
+      "ui_libraries": ["Radix UI", "Tailwind CSS 4.x", "Shadcn/ui"],
+      "state_management": ["Zustand"],
+      "build_tools": ["Vite", "Turbo (monorepo)"]
+    },
+    "cli": {
+      "runtime": ["Bun", "Node.js"],
+      "frameworks": ["Commander.js", "@clack/prompts"]
+    },
+    "integrations": {
+      "ai_platforms": ["Claude (Anthropic)"],
+      "protocols": ["MCP (Model Context Protocol)"],
+      "sdks": ["@modelcontextprotocol/sdk", "mcp-go"]
+    }
+  },
+  "extensibility_points": {
+    "documented": [
+      {
+        "name": "Custom MCP Servers",
+        "mechanism": "MCP server protocol implementation",
+        "configuration": "mcp-config.json",
+        "examples": "Database queries, API inspection, deployment tools"
+      },
+      {
+        "name": "Custom Commands",
+        "mechanism": "Markdown files in .claude/commands/",
+        "format": "Structured markdown with workflow steps",
+        "installation": "npx humanlayer claude init"
+      },
+      {
+        "name": "Custom Agents",
+        "mechanism": "Markdown files in .claude/agents/",
+        "format": "Agent definition with tools, model, purpose",
+        "usage": "Referenced in commands or spawned directly"
+      },
+      {
+        "name": "Custom RPC Methods",
+        "mechanism": "Extend daemon RPC server",
+        "location": "hld/rpc/server.go",
+        "examples": "Custom analytics, session operations"
+      },
+      {
+        "name": "Event Bus Subscriptions",
+        "mechanism": "Subscribe to daemon events",
+        "events": ["new_approval", "approval_resolved", "session_status_changed"]
+      },
+      {
+        "name": "UI Components",
+        "mechanism": "React components in humanlayer-wui/src/components/",
+        "styling": "Tailwind CSS, Radix UI primitives"
+      }
+    ]
+  },
+  "metrics": {
+    "codebase_size": {
+      "go_files": 98,
+      "typescript_files": 232,
+      "commands": 30,
+      "agents": 6,
+      "mcp_servers": 2
+    },
+    "maturity": {
+      "stage": "Early production",
+      "users": "YC companies, early adopters",
+      "adoption": "Growing (based on testimonials)"
+    }
+  }
+}
+
