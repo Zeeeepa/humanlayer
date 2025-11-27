@@ -86,14 +86,54 @@ HumanLayer's expert engineers will ship in the trenches with you and your team u
 
 ## Quick Start
 
-```bash
-# Coming soon - join the waitlist for early access
-npx humanlayer join-waitlist --email ...
+### Installation
+
+Choose your platform:
+
+**Windows 10/11:**
+```powershell
+git clone https://github.com/humanlayer/humanlayer.git
+cd humanlayer
+powershell -ExecutionPolicy Bypass -File .\scripts\windows-setup.ps1
 ```
+
+**Linux/macOS:**
+```bash
+git clone https://github.com/humanlayer/humanlayer.git
+cd humanlayer
+make setup
+```
+
+### Launch Your First Session
+
+```bash
+# Start development environment
+make daemon-dev  # Terminal 1
+make wui-dev     # Terminal 2
+
+# Launch a Claude Code session
+npx humanlayer launch "implement user authentication"
+```
+
+### 📚 Platform-Specific Guides
+
+- **[Windows Deployment](WINDOWS_DEPLOYMENT.md)** - Complete Windows setup (10,000+ words)
+- **[Linux/macOS Deployment](DEPLOYMENT.md)** - Unix-based systems guide
+- **[Development Guide](DEVELOPMENT.md)** - Development workflow and best practices
+- **[Quick Start (Windows)](WINDOWS_QUICKSTART.md)** - 10-minute Windows setup
 
 ---
 
-## Legacy Documentation
+## Documentation
+
+### Setup & Deployment
+- **[Windows Deployment Guide](WINDOWS_DEPLOYMENT.md)** - Comprehensive Windows 10/11 setup
+- **[Linux/macOS Deployment Guide](DEPLOYMENT.md)** - Complete Unix setup guide  
+- **[Windows Quick Start](WINDOWS_QUICKSTART.md)** - Fast-track Windows setup
+- **[Development Guide](DEVELOPMENT.md)** - Development workflows and parallel environments
+- **[Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
+
+### Legacy SDK Documentation
 
 Looking for the HumanLayer SDK documentation? See [humanlayer.md](./humanlayer.md)
 
